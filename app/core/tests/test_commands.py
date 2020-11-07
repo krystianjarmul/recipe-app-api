@@ -4,8 +4,17 @@ from django.core.management import call_command
 from django.db.utils import OperationalError
 from django.test import TestCase
 
+from io import StringIO
+
 
 class CommandTests(TestCase):
+
+    def setUp(self):
+        self.so = patch('sys.stdout', new_callable=StringIO)
+        self.so.start()
+
+    def tearDown(self):
+        self.so.stop()
 
     def test_wait_for_db_ready(self):
         """Test waiting for db when db is abailable"""
